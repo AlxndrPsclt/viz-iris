@@ -1,6 +1,6 @@
 function setup() {
 
-  BACKGROUND_FADE = '0.01';
+  BACKGROUND_FADE = '0.1';
   ENERGY = 5;
 
   CELL_SIZE_X = 50;
@@ -42,19 +42,22 @@ function setup() {
   COLOR_PALETTE_GREENS = [
     "#5f801377",
     "#a1bf5c77",
+    "#0a330077",
+    "#3e5e2677",
   ];
 
   COLOR_PALETTE_BROWNS = [
-    "#e3cb8122",
-    "#ba931e22",
     "#91510c22",
+    "#66390122",
+    "#ba931e22",
   ];
 
 
   // Default config; can be overrided later by a named, or custom config
 
-  refreshColor = `rgba(10,10,10,255)`;
-  background(refreshColor);
+  //baseColor = `rgba(10,10,10,255)`;
+  baseColor = '#0F0F0F';
+  background(baseColor);
   refreshColor = `rgba(10,10,10,${BACKGROUND_FADE})`;
 
   knots={};
@@ -98,7 +101,7 @@ function p(X,Y,linkUuid=null,uuid=null,age=1) { //POINT
   puuid = uuid? uuid : crypto.randomUUID();
   grille[X][Y] = puuid;
   leafColor = COLOR_PALETTE_GREENS[int(random(COLOR_PALETTE_GREENS.length))];
-  branchColor = COLOR_PALETTE_BROWNS[int(random(COLOR_PALETTE_BROWNS.length))];
+  branchColor = COLOR_PALETTE_BROWNS[min(COLOR_PALETTE_BROWNS.length -1, int(age/20))];
   leafSize = max(5, max(30-int(age/4), int(random(60 - age/2))));
   console.log(leafColor);
   return {
@@ -178,7 +181,7 @@ function draw() {
 
       if (knot.linkUuid) {
         otherKnot = knots[knot.linkUuid];
-        strokeWeight(max(1, 24-int(knot.age/3)));
+        strokeWeight(max(1, 20-int(knot.age/3)));
         stroke(knot.branchColor);
         line(otherKnot.x(), otherKnot.y(), knot.x(), knot.y());
       }
