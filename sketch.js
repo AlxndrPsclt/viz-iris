@@ -1,3 +1,15 @@
+let font,
+  InitialFontsize = 100;
+
+let lettersAlpha = 0;
+
+function preload() {
+  // Ensure the .ttf or .otf font stored in the assets directory
+  // is loaded before setup() and draw() are called
+  font = loadFont('assets/fonts/Roboto_Slab/RobotoSlab-VariableFont_wght.ttf');
+}
+
+
 function setup() {
 
   BACKGROUND_FADE = '0.1';
@@ -12,6 +24,11 @@ function setup() {
   // Library setup
   createCanvas( window.screen.width * window.devicePixelRatio, window.screen.height* window.devicePixelRatio);
 
+  textFont(font);
+  textSize(InitialFontsize);
+  textAlign(CENTER, CENTER);
+
+  //fill(65);
 
   noCursor();
   frameRate(10);
@@ -51,6 +68,8 @@ function setup() {
     "#66390122",
     "#ba931e22",
   ];
+
+  colorMode(HSB, 360, 360, 360, 360);
 
 
   // Default config; can be overrided later by a named, or custom config
@@ -97,13 +116,11 @@ function setup() {
 }
 
 function p(X,Y,linkUuid=null,uuid=null,age=1) { //POINT
-  console.log(uuid);
   puuid = uuid? uuid : crypto.randomUUID();
   grille[X][Y] = puuid;
   leafColor = COLOR_PALETTE_GREENS[int(random(COLOR_PALETTE_GREENS.length))];
   branchColor = COLOR_PALETTE_BROWNS[min(COLOR_PALETTE_BROWNS.length -1, int(age/20))];
   leafSize = max(5, max(30-int(age/4), int(random(60 - age/2))));
-  console.log(leafColor);
   return {
     X: X,
     Y: Y,
@@ -162,13 +179,34 @@ function randint(energy) {
 
 function v(p1,p2) {
   return {
-    x: (p2.x - p1.x),
-    y: (p2.y - p1.y),
+    x: (p2.x() - p1.x()),
+    y: (p2.y() - p1.y()),
   }
 }
 
 function draw() {
   if (frame >= 0 && (MAX_FRAME== -1 || frame < MAX_FRAME)) {
+
+
+
+    if (frame<3*25) {
+      strokeWeight(0);
+      fill(baseColor);
+    } else {
+      textSize(InitialFontsize);
+      lettersColor = color(50,220,350,200+20*int(log(frame)));
+      fill(lettersColor);
+      text('IMPLANTATION', 4*WIDTH/10, 2*HEIGHT/10);
+      if ( frame> 5*25 ) {
+        text('by OP3R4', 7*WIDTH/10, 7.5*HEIGHT/10);
+      }
+      if ( frame> 4*25 ) {
+        textSize(50);
+        text('19/10\n 00H-12H', 2*WIDTH/10, 7.5*HEIGHT/10);
+      }
+    }
+      
+
     frame+=1;
 
     background(refreshColor);
@@ -184,11 +222,22 @@ function draw() {
         strokeWeight(max(1, 20-int(knot.age/3)));
         stroke(knot.branchColor);
         line(otherKnot.x(), otherKnot.y(), knot.x(), knot.y());
+        stroke(knot.leafColor);
+        fill(knot.leafColor);
+        strokeWeight(knot.leafSize);
+        strokeWeight(3);
+        direction = v(knot, otherKnot);
+        coeff=min(5, Math.log(knot.age));
+        triangle(
+          knot.x()-direction.y/coeff + randval(2),
+          knot.y()+direction.x/coeff + randval(2),
+          knot.x()+direction.y/coeff + randval(2),
+          knot.y()-direction.x/coeff + randval(2),
+          knot.x()+direction.x/coeff + randval(2),
+          knot.y()+direction.y/coeff + randval(2))
+        //point(knot.x(), knot.y());
       }
 
-      stroke(knot.leafColor);
-      strokeWeight(knot.leafSize);
-      point(knot.x(), knot.y());
       //strokeColor = COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
       //strokeColor = "#202020;
     });
