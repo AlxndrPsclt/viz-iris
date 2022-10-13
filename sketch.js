@@ -202,24 +202,25 @@ function draw() {
       lettersColor = color(50,220,350,200+20*int(log(frame)));
       fill(lettersColor);
 
-      if (frame % 60 == 0) {
+      if (frame % 7 == 0) {
+        console.log("Changing disp");
         implantation_disp_x=randval(3);
         implantation_disp_y=randval(3);
         opera_disp_x=randval(3);
         opera_disp_y=randval(3);
       }
 
-      text('IMPLANTATION', 4*WIDTH/10+ implantation_disp_x, 2*HEIGHT/10+ randval(3) + implantation_disp_y);
+      text('IMPLANTATION', 4*WIDTH/10+ implantation_disp_x, 2*HEIGHT/10 +  implantation_disp_y);
       if ( frame> 6.5*25 ) {
-        text('by OP3R4', 7*WIDTH/10+ implantation_disp_y, 7.5*HEIGHT/10+ randval(3) -implantation_disp_x);
+        text('by OP3R4', 7*WIDTH/10+ implantation_disp_y, 7.5*HEIGHT/10 - implantation_disp_x);
       }
       if ( frame> 4*25 ) {
         textSize(50);
-        text('19/10\n 00H-12H', 2*WIDTH/10+ randval(3), 7*HEIGHT/10+ randval(3));
+        text('19/10\n 00H-12H', 2*WIDTH/10+opera_disp_x, 7*HEIGHT/10+opera_disp_y);
       }
       if ( frame> 5*25 ) {
         textSize(40 );
-        text('SECRET PLACE', 2*WIDTH/10+ randval(3), 8.4*HEIGHT/10+ randval(3));
+        text('SECRET PLACE', 2*WIDTH/10 - opera_disp_y, 8.4*HEIGHT/10 - opera_disp_x);
       }
     }
       
